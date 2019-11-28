@@ -1,0 +1,10 @@
+metadata:
+  environment: "none"
+bundle:
+  sources: "/app/"
+  output: "/dist/"
+  entrypoint: "/app/index.tsx"
+  html:
+    template: "/app/index.html"
+server:
+  port: 3020

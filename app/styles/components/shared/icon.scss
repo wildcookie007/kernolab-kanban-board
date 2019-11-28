@@ -1,0 +1,76 @@
+@keyframes icon-pop {
+
+	50% {
+		transform: scale(.85);
+	}
+}
+
+.icon {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 0;
+
+
+	svg {
+		display: inline-block;
+		vertical-align: middle;
+		width: 16px;
+		height: 16px;
+
+		path {
+			fill: #262626a6;
+			shape-rendering: geometricprecision;
+		}
+	}
+
+	&.floatedLeft {
+		float: left;
+	}
+
+	&.floatedRight {
+		float: right;
+	}
+
+	&.small {
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	&.medium {
+		svg {
+			width: 24px;
+			height: 24px;
+		}
+	}
+
+	&.large {
+		svg {
+			width: 32px;
+			height: 32px;
+		}
+	}
+}
+
+.resizing {
+	svg,
+	svg path {
+		transition: fill .15s ease-in-out;
+	}
+
+	&:hover {
+		span > i,
+		span > i svg {
+			animation-name: icon-pop;
+			animation-duration: .35s;
+			animation-timing-function: linear;
+			animation-iteration-count: 1;
+			transition: transform .4s ease-out;
+
+			path {
+				fill: $icon-hover-color !important;
+			}
+		}
+	}
+}
