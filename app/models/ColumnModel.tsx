@@ -1,11 +1,12 @@
 import { observable, action } from 'mobx';
-import { TaskModel, TaskConstructor } from './TaskModel';
+import { TaskModel, TaskConstructor, DraggedOn } from './TaskModel';
 import { ValidationFieldModel } from './ValidationFieldModel';
 import { BoardModel } from './BoardModel';
 
 export class ColumnModel {
     id: number;
     @observable initialized = false;
+    @observable taskOnGoingCreate = false;
     @observable name = new ValidationFieldModel<string>((val) => Boolean(val));
     @observable tasks: TaskModel[] = [];
 
@@ -14,7 +15,12 @@ export class ColumnModel {
     }
 
     @action addTask = () => {
+        this.taskOnGoingCreate = true;
         this.tasks.push(new TaskModel(BoardModel.nextTaskId));
+    };
+
+    @action setTaskOnGoingCreate = () => {
+        this.taskOnGoingCreate = false;
     };
 
     @action copyDragTask = (task: TaskConstructor, targetIdx: number) => {
@@ -40,6 +46,31 @@ export class ColumnModel {
 
     findTaskIdx(taskId: number): number {
         return this.tasks.findIndex((t) => t.id === taskId);
+    }
+
+    getUpdatedIndexToTarget(position: DraggedOn, currentDraggedIndex: number, assignedIndex: number): number {
+        let updatedIndex = assignedIndex;
+
+        switch (position) {
+            case 'below': {
+                // Make sure we dont go out of bounds
+                if (assignedIndex !== this.tasks.length && assignedIndex < currentDraggedIndex) {
+                    updatedIndex++;
+                }
+                break;
+            }
+            case 'above': {
+                // Make sure we dont go out of bounds
+                if (assignedIndex !== 0 && assignedIndex > currentDraggedIndex) {
+                    updatedIndex--;
+                }
+                break;
+            }
+            default: {
+            }
+        }
+
+        return updatedIndex;
     }
 
     @action setInitialized(value: boolean) {

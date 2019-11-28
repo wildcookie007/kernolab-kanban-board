@@ -4,14 +4,17 @@ import { observer } from 'mobx-react';
 import * as styles from '@app/styles/components/board.scss';
 import { Input } from '../shared/Input';
 import { jClass } from '@app/utils/utils';
+import { Icon } from '../shared/Icon';
+import { mdiDelete } from '@mdi/js';
+import { Button } from '../shared/Button';
 
 interface TaskItemProps {
     task: TaskModel;
-    raktas: number;
     onTaskRemove: (taskId: number) => void;
     onTaskDragStart: (task: TaskModel) => void;
     onTaskDragOver: (task: TaskModel, dragPosition: DraggedOn) => void;
     onTaskDragEnd: () => void;
+    onTaskInitialized: () => void;
 }
 
 export const TaskItem = React.memo(
@@ -25,6 +28,7 @@ export const TaskItem = React.memo(
                 return;
             }
 
+            props.onTaskInitialized();
             task.setInitialized(true);
         };
 
@@ -66,20 +70,21 @@ export const TaskItem = React.memo(
                 draggable={task.initialized}
             >
                 {!task.initialized ? (
-                    <Input
-                        bordered
-                        placeholder='Add task name...'
-                        value={task.title.value}
-                        onChange={task.title.handleChange}
-                        hasError={task.title.showError}
-                        onBlur={handleSave}
-                        onPressEnter={handleSave}
-                    />
+                    <>
+                        <Input
+                            bordered
+                            placeholder='Add task name...'
+                            value={task.title.value}
+                            onChange={task.title.handleChange}
+                            hasError={task.title.showError}
+                            onBlur={handleSave}
+                            onPressEnter={handleSave}
+                        />
+                        <Button transparent floated='right' icon={<Icon path={mdiDelete} />} />
+                    </>
                 ) : (
                     <span>
-                        <span>
-                            #{task.id} {props.raktas}
-                        </span>
+                        <span>#{task.id}</span>
                         {task.title.value}
                     </span>
                 )}

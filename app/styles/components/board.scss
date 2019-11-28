@@ -36,6 +36,10 @@
                     padding: 0.3em 0;
                     display: block;
                     font-weight: 600;
+
+                    .columnActions {
+                        overflow: hidden;
+                    }
                 }
             }
         }
@@ -54,6 +58,8 @@
                 background: #fff;
                 padding: 0.5em;
                 cursor: grab;
+                overflow: hidden;
+                word-break: break-word;
 
                 &:active {
                     cursor: grabbing;
@@ -67,10 +73,17 @@
                     cursor: default;
                 }
 
-                > span > span {
+                > span {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: block;
+                    white-space: nowrap;
                     font-size: $fontlarge;
-                    padding-right: 0.5em;
-                    color: #9e9e9e;
+
+                    > span {
+                        padding-right: 0.5em;
+                        color: #9e9e9e;
+                    }
                 }
             }
         }

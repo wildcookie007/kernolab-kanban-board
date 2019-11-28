@@ -5,3 +5,4 @@ export const boardColumnTaskList: string;
 export const boardColumn: string;
 export const columnTask: string;
 export const uninitialized: string;
+export const columnActions: string;

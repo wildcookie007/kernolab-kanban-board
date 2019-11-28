@@ -10,6 +10,7 @@ import { Icon } from '../shared/Icon';
 import { observer } from 'mobx-react';
 import { TaskModel, DraggedOn, TaskConstructor } from '@app/models/TaskModel';
 import { ColumnModel } from '@app/models/ColumnModel';
+import { action } from 'mobx';
 
 interface BoardProps {
     board: BoardModel;
@@ -22,7 +23,7 @@ export class Board extends Component<BoardProps> {
     };
 
     /**
-     * Bubbles up from child {<TaskItem />} onDragStart
+     * Bubbles up from child <TaskItem /> onDragStart event
      * @param {ColumnModel} column - The original column from which the task is being dragged off.
      * @param {TaskModel} task - The task that is currently being dragged.
      */
@@ -41,13 +42,12 @@ export class Board extends Component<BoardProps> {
         const { board } = this.props;
         const { currentlyDragged } = board;
 
-        if (currentlyDragged.column === column && currentlyDragged.targetIdx !== -1) {
-            const draggedTaskIdx = column.findTaskIdx(currentlyDragged.task.id);
-
-            if (draggedTaskIdx === currentlyDragged.targetIdx) {
-                board.resetCurrentDrag();
-                return;
-            }
+        if (
+            currentlyDragged.column === column &&
+            (currentlyDragged.targetIdx === -1 || currentlyDragged.targetIdx === undefined)
+        ) {
+            board.resetCurrentDrag();
+            return;
         }
 
         // Copy the task
@@ -64,38 +64,35 @@ export class Board extends Component<BoardProps> {
      * @param {ColumnModel} column - The column to which the task, which is hovered upon, belongs to.
      * @param {DraggedOn} dragPosition - Specifies whether the task is hovering above or below
      */
-    handleTaskDragOver = (column: ColumnModel) => (task: TaskModel, dragPosition: DraggedOn) => {
+    @action handleTaskDragOver = (column: ColumnModel) => (task: TaskModel, dragPosition: DraggedOn) => {
         const { board } = this.props;
         const {
             currentlyDragged: { targetTask },
             currentlyDragged,
         } = board;
 
-        const overlayedTaskIdx = column.findTaskIdx(task.id);
+        currentlyDragged.targetIdx = column.findTaskIdx(task.id);
 
-        let assignedIndex = overlayedTaskIdx;
-        currentlyDragged.targetIdx = assignedIndex;
-
+        // Adjust indexes based on wanted position, different drop column accounted
         if (board.currentlyDragged.column === column) {
             const currentTaskIdx = column.findTaskIdx(currentlyDragged.task.id);
-            dragPosition === 'below' &&
-                overlayedTaskIdx !== column.tasks.length &&
-                overlayedTaskIdx < currentTaskIdx &&
-                assignedIndex++;
-            dragPosition === 'above' && overlayedTaskIdx !== 0 && overlayedTaskIdx > currentTaskIdx && assignedIndex--;
+            currentlyDragged.targetIdx = column.getUpdatedIndexToTarget(
+                dragPosition,
+                currentTaskIdx,
+                currentlyDragged.targetIdx,
+            );
 
-            currentlyDragged.targetIdx = assignedIndex;
-            if (assignedIndex === currentTaskIdx) {
+            // Check if the target position points to the same spot the currently dragged task is
+            if (currentlyDragged.targetIdx === currentTaskIdx) {
                 task.setDraggedOn(null);
                 currentlyDragged.targetIdx = -1;
                 return;
             }
         } else {
-            dragPosition === 'below' && assignedIndex++;
-            currentlyDragged.targetIdx = assignedIndex;
+            dragPosition === 'below' && currentlyDragged.targetIdx++;
         }
 
-        // If it's the same task - no need for actions
+        // If it's the same task - just update position
         if (targetTask === task) {
             targetTask.draggedOn = dragPosition;
             return;
@@ -114,9 +111,9 @@ export class Board extends Component<BoardProps> {
     renderColumnList = () => {
         const { board } = this.props;
 
-        return board.columns.map((c, idx) => (
+        return board.columns.map((c) => (
             <ColumnItem
-                key={idx}
+                key={c.id}
                 column={c}
                 currentlyDragged={board.currentlyDragged}
                 onRemoveColumn={this.handleRemoveColumn}

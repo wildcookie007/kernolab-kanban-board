@@ -31,15 +31,15 @@ export const ColumnItem = React.memo(
 
             return (
                 <div className={styles.boardColumnTaskList}>
-                    {column.tasks.map((t, i) => (
+                    {column.tasks.map((t) => (
                         <TaskItem
-                            raktas={i}
-                            key={i}
+                            key={t.id}
                             task={t}
                             onTaskRemove={column.removeTask}
                             onTaskDragStart={props.onTaskDragStart(column)}
                             onTaskDragOver={props.onTaskDragOver(column)}
                             onTaskDragEnd={props.onTaskDragEnd}
+                            onTaskInitialized={column.setTaskOnGoingCreate}
                         />
                     ))}
                 </div>
@@ -89,27 +89,30 @@ export const ColumnItem = React.memo(
                     ) : (
                         <span>
                             {column.name.value}
-                            <Button
-                                floated='right'
-                                transparent
-                                onClick={column.addTask}
-                                icon={<Icon path={mdiPlusBox} />}
-                                title='Add a task'
-                            />
-                            <Button
-                                floated='right'
-                                transparent
-                                onClick={column.name.setEditable}
-                                icon={<Icon path={mdiPencil} />}
-                                title='Edit name'
-                            />
-                            <Button
-                                floated='right'
-                                transparent
-                                onClick={props.onRemoveColumn(column.id)}
-                                icon={<Icon path={mdiTrashCan} />}
-                                title='Delete column'
-                            />
+                            <div className={styles.columnActions}>
+                                <Button
+                                    floated='right'
+                                    transparent
+                                    disabled={column.taskOnGoingCreate}
+                                    onClick={column.addTask}
+                                    icon={<Icon path={mdiPlusBox} />}
+                                    title='Add a task'
+                                />
+                                <Button
+                                    floated='right'
+                                    transparent
+                                    onClick={column.name.setEditable}
+                                    icon={<Icon path={mdiPencil} />}
+                                    title='Edit name'
+                                />
+                                <Button
+                                    floated='right'
+                                    transparent
+                                    onClick={props.onRemoveColumn(column.id)}
+                                    icon={<Icon path={mdiTrashCan} />}
+                                    title='Delete column'
+                                />
+                            </div>
                         </span>
                     )}
                 </div>

@@ -207,7 +207,14 @@
     &.disabled {
         pointer-events: none;
         cursor: default;
-        background-color: $disabled-background;
         color: $disabled-text;
+
+        > i svg path {
+            fill: $disabled-icon;
+        }
+
+        &:not(.transparent) {
+            background-color: $disabled-background;
+        }
     }
 }
