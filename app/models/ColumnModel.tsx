@@ -23,7 +23,7 @@ export class ColumnModel {
         this.taskOnGoingCreate = false;
     };
 
-    @action copyDragTask = (task: TaskConstructor, targetIdx: number) => {
+    @action copyDroppedTask = (task: TaskConstructor, targetIdx: number) => {
         // We dont want to mutate the original object
         const taskCopy = new TaskModel(null, task);
 
@@ -48,7 +48,7 @@ export class ColumnModel {
         return this.tasks.findIndex((t) => t.id === taskId);
     }
 
-    getUpdatedIndexToTarget(position: DraggedOn, currentDraggedIndex: number, assignedIndex: number): number {
+    getUpdatedIndexToTarget = (position: DraggedOn, currentDraggedIndex: number, assignedIndex: number): number => {
         let updatedIndex = assignedIndex;
 
         switch (position) {
@@ -71,7 +71,7 @@ export class ColumnModel {
         }
 
         return updatedIndex;
-    }
+    };
 
     @action setInitialized(value: boolean) {
         this.initialized = value;

@@ -36,14 +36,14 @@ export class Board extends Component<BoardProps> {
     };
 
     /**
-     * @param {ColumnModel} column - The column on which the task was dropped.
+     * @param {ColumnModel} droppedOnColumn - The column on which the task was dropped.
      */
-    handleTaskDrop = (column: ColumnModel) => {
+    handleTaskDrop = (droppedOnColumn: ColumnModel) => {
         const { board } = this.props;
         const { currentlyDragged } = board;
 
         if (
-            currentlyDragged.column === column &&
+            currentlyDragged.column === droppedOnColumn &&
             (currentlyDragged.targetIdx === -1 || currentlyDragged.targetIdx === undefined)
         ) {
             board.resetCurrentDrag();
@@ -53,7 +53,7 @@ export class Board extends Component<BoardProps> {
         // Copy the task
         const copyTarget: TaskConstructor = Object.assign({}, currentlyDragged.task.toConstructorRequest());
         currentlyDragged.column.removeTask(currentlyDragged.task.id);
-        column.copyDragTask(copyTarget, currentlyDragged.targetIdx);
+        droppedOnColumn.copyDroppedTask(copyTarget, currentlyDragged.targetIdx);
 
         // Remove task from previous column and reset drag properties
         board.resetCurrentDrag();
