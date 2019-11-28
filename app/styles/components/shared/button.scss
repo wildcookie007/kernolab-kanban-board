@@ -1,213 +1,213 @@
 @keyframes waveEffect {
-	100% {
-		-webkit-box-shadow: 0 0 0 6px $input-hover-color;
-		box-shadow: 0 0 0 6px $input-hover-color;
-	}
+    100% {
+        -webkit-box-shadow: 0 0 0 6px $input-hover-color;
+        box-shadow: 0 0 0 6px $input-hover-color;
+    }
 }
 
 @-webkit-keyframes waveEffect {
-	100% {
-		-webkit-box-shadow: 0 0 0 6px $input-hover-color;
-		box-shadow: 0 0 0 6px $input-hover-color;
-	}
+    100% {
+        -webkit-box-shadow: 0 0 0 6px $input-hover-color;
+        box-shadow: 0 0 0 6px $input-hover-color;
+    }
 }
 
 @keyframes fadeEffect {
-	100% {
-		opacity: 0;
-	}
+    100% {
+        opacity: 0;
+    }
 }
 
 @-webkit-keyframes fadeEffect {
-	100% {
-		opacity: 0;
-	}
+    100% {
+        opacity: 0;
+    }
 }
 
 .button {
-	outline: 0;
-	line-height: 1.499;
-	position: relative;
-	display: inline-block;
-	font-weight: 400;
-	white-space: nowrap;
-	text-align: center;
-	background-image: none;
-	border: 1px solid transparent;
-	box-shadow: 0 2px 0 rgba(0, 0, 0, .015);
-	transition: all .25s cubic-bezier(.645, .045, .355, 1);
-	user-select: none;
-	touch-action: manipulation;
-	padding: 0 15px;
-	font-size: $fontxlarge;
-	border-radius: 4px;
-	-webkit-appearance: button;
+    outline: 0;
+    line-height: 1.499;
+    position: relative;
+    display: inline-block;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+    background-image: none;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+    user-select: none;
+    touch-action: manipulation;
+    padding: 0 15px;
+    font-size: $fontxlarge;
+    border-radius: 4px;
+    -webkit-appearance: button;
+    color: $text-black;
+    background-color: #fff;
 
-	&.selectable {
-		cursor: pointer;
-	}
+    &.selectable {
+        cursor: pointer;
+    }
 
-	color: $text-black;
-	background-color: #fff;
+    &:not(.transparent) {
+        height: 32px;
+    }
 
-	&:not(.transparent) {
-		height: 32px;
-	}
+    &:focus {
+        outline: 0;
 
-	&:focus {
-		outline: 0;
+        &::after:not(.transparent) {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: block;
+            border-radius: inherit;
+            -webkit-box-shadow: 0 0 0 0 $input-hover-color;
+            box-shadow: 0 0 0 0 $input-hover-color;
+            opacity: 0.2;
+            -webkit-animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1),
+                waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
+            animation: fadeEffect 2s cubic-bezier(0.08, 0.82, 0.17, 1),
+                waveEffect 0.4s cubic-bezier(0.08, 0.82, 0.17, 1);
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+            content: '';
+            pointer-events: none;
+        }
+    }
 
-		&::after:not(.transparent) {
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			display: block;
-			border-radius: inherit;
-			-webkit-box-shadow: 0 0 0 0 $input-hover-color;
-			box-shadow: 0 0 0 0 $input-hover-color;
-			opacity: .2;
-			-webkit-animation: fadeEffect 2s cubic-bezier(.08, .82, .17, 1), waveEffect .4s cubic-bezier(.08, .82, .17, 1);
-			animation: fadeEffect 2s cubic-bezier(.08, .82, .17, 1), waveEffect .4s cubic-bezier(.08, .82, .17, 1);
-			-webkit-animation-fill-mode: forwards;
-			animation-fill-mode: forwards;
-			content: '';
-			pointer-events: none;
-		}
-	}
+    &:hover {
+        background-color: $button-standard-hover-color;
 
-	&:hover {
-		background-color: $button-standard-hover-color;
+        &.transparent {
+            > span {
+                color: $button-standard-hover-color;
+            }
 
-		&.transparent {
-			> span {
-				color: $button-standard-hover-color;
-			}
+            svg path {
+                fill: $button-primary-hover-color;
+            }
+        }
+    }
 
-			svg path {
-				fill: $button-standard-hover-color;
-			}
-		}
-	}
+    &.primary {
+        color: #fff;
+        background-color: $main-blue;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
 
-	&.primary {
-		color: #fff;
-		background-color: $main-blue;
-		box-shadow: 0 2px 0 rgba(0, 0, 0, .045);
-		
-		svg path {
-			fill: #fff;
-		}
+        svg path {
+            fill: #fff !important;
+        }
 
-		&:hover {
-			background-color: $button-primary-hover-color;
-		}
-	}
+        &:hover {
+            background-color: $button-primary-hover-color;
+        }
+    }
 
-	&.floatedLeft {
-		float: left;
+    &.floatedLeft {
+        float: left;
 
-		i {
-			padding: 0 5px 0 0;
-		}
-	}
+        i {
+            padding: 0 5px 0 0;
+        }
+    }
 
-	&.floatedRight {
-		float: right;
+    &.floatedRight {
+        float: right;
 
-		i {
-			padding: 0 0 0 5px;
-		}
-	}
+        i {
+            padding: 0 0 0 5px;
+        }
+    }
 
-	&.fluid {
-		width: 100%;
-		display: block;
-	}
+    &.fluid {
+        width: 100%;
+        display: block;
+    }
 
-	&.rounded {
-		border-radius: 6px;
-	}
+    &.rounded {
+        border-radius: 6px;
+    }
 
-	&.label {
-		border-radius: 14px;
-		padding: 0 .5em;
-	}
+    &.label {
+        border-radius: 14px;
+        padding: 0 0.5em;
+    }
 
-	&.transparent {
-		border-color: transparent;
-		background: transparent;
-		border: 0;
-		box-shadow: none;
-		padding: .1em;
-	}
+    &.transparent {
+        border-color: transparent;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 0.1em;
+    }
 
-	&.tiny {
-		span {
-			font-size: $fontxxsmall;
-		}
-	}
+    &.tiny {
+        span {
+            font-size: $fontxxsmall;
+        }
+    }
 
-	&.small {
-		span {
-			font-size: $fontxsmall;
-		}
-	}
+    &.small {
+        span {
+            font-size: $fontxsmall;
+        }
+    }
 
-	&.medium {
-		span {
-			font-size: $fontsmall;
-		}
-	}
+    &.medium {
+        span {
+            font-size: $fontsmall;
+        }
+    }
 
-	&.large {
-		span {
-			font-size: $fontxlarge;
-		}
-	}
+    &.large {
+        span {
+            font-size: $fontxlarge;
+        }
+    }
 
-	&.big {
-		span {
-			font-size: 18px;
-		}
-	}
+    &.big {
+        span {
+            font-size: 18px;
+        }
+    }
 
-	&.massive {
-		span {
-			font-size: 24px;
-		}
-	}
+    &.massive {
+        span {
+            font-size: 24px;
+        }
+    }
 
-	span {
-		display: inline-block;
-		vertical-align: middle;
-		transition: .15s ease-in-out;
+    span {
+        display: inline-block;
+        transition: 0.15s ease-in-out;
 
-		&:not(.loadingSpan) > i {
-			padding: 0 .3em;
-		}
-	}
+        &:not(.loadingSpan) > i {
+            padding: 0 0.3em;
+        }
+    }
 
-	> i {
-		padding: 0 .3em;
-	}
+    > i {
+        padding: 0 0.3em;
+    }
 
-	> span {
-		pointer-events: none;
-		font-weight: 500;
-		font-size: $fontlarge;
-	}
+    > span {
+        pointer-events: none;
+        font-weight: 500;
+        font-size: $fontlarge;
+    }
 
-	span.loadingSpan {
-		color: transparent;
-		visibility: hidden;
-	}
+    span.loadingSpan {
+        color: transparent;
+        visibility: hidden;
+    }
 
-	&.disabled {
-		pointer-events: none;
-		cursor: default;
-		background-color: $disabled-background;
-		color: $disabled-text;
-	}
+    &.disabled {
+        pointer-events: none;
+        cursor: default;
+        background-color: $disabled-background;
+        color: $disabled-text;
+    }
 }

@@ -1,16 +1,15 @@
 {
-	"overrides": [
-	  {
-		"files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
-		"options": {
-		  "arrowParens": "always",
-		  "singleQuote": true,
-		  "jsxSingleQuote": true,
-		  "tabWidth": 4,
-		  "printWidth": 120,
-		  "trailingComma": "all"
-		}
-	  }
-	]
-  }
-  
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx", "*.ts", "*.tsx", "*.scss"],
+      "options": {
+        "arrowParens": "always",
+        "singleQuote": true,
+        "jsxSingleQuote": true,
+        "tabWidth": 4,
+        "printWidth": 120,
+        "trailingComma": "all"
+      }
+    }
+  ]
+}

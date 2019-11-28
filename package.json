@@ -90,6 +90,7 @@
     "jest": "^23.0.1",
     "mobx-react-devtools": "^6.1.1",
     "react-hot-loader": "^4.12.18",
+    "sass-lint": "^1.13.1",
     "ts-jest": "^24.1.0",
     "tsconfig-paths-jest": "^0.0.1",
     "webpack-cli": "^3.3.10",

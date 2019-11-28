@@ -1,11 +1,11 @@
 .homeContainer {
-  height: 100%;
-  text-align: center;
-  justify-content: center;
+    height: 100vh;
+    text-align: center;
+    justify-content: center;
 
-  .headerContainer {
-    margin-top: 2em;
-    font-weight: 600;
-    font-size: $fontxxxlarge;
-  }
+    .headerContainer {
+        margin-top: 1.5em;
+        font-weight: 600;
+        font-size: $fontxxxlarge;
+    }
 }
