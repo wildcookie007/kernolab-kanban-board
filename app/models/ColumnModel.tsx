@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
-import { TaskModel } from './TaskModel';
+import { TaskModel, TaskConstructor } from './TaskModel';
 import { ValidationFieldModel } from './ValidationFieldModel';
+import { BoardModel } from './BoardModel';
 
 export class ColumnModel {
-    private _currentTaskId = 0;
     id: number;
     @observable initialized = false;
     @observable name = new ValidationFieldModel<string>((val) => Boolean(val));
@@ -14,17 +14,18 @@ export class ColumnModel {
     }
 
     @action addTask = () => {
-        this.tasks.push(new TaskModel(this._currentTaskId));
-        this._currentTaskId++;
-    }
+        this.tasks.push(new TaskModel(BoardModel.nextTaskId));
+    };
 
-    @action copyDragTask = (task: TaskModel) => {
+    @action copyDragTask = (task: TaskConstructor, targetIdx: number) => {
         // We dont want to mutate the original object
-        const taskCopy = Object.assign({}, task);
-        taskCopy.id = this._currentTaskId;
+        const taskCopy = new TaskModel(null, task);
 
-        this.tasks.push(taskCopy);
-        this._currentTaskId++;
+        if (targetIdx !== -1 && targetIdx !== this.tasks.length && targetIdx !== undefined) {
+            this.tasks.splice(targetIdx, 0, taskCopy);
+        } else {
+            this.tasks.push(taskCopy);
+        }
     };
 
     @action removeTask = (id: number) => {
@@ -35,9 +36,13 @@ export class ColumnModel {
         }
 
         this.tasks.splice(taskIndex, 1);
+    };
+
+    findTaskIdx(taskId: number): number {
+        return this.tasks.findIndex((t) => t.id === taskId);
     }
 
-    @action setInitialized = (value: boolean) => {
+    @action setInitialized(value: boolean) {
         this.initialized = value;
     }
 }

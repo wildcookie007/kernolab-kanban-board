@@ -8,7 +8,7 @@ import { Button } from '../shared/Button';
 import { mdiPlus } from '@mdi/js';
 import { Icon } from '../shared/Icon';
 import { observer } from 'mobx-react';
-import { TaskModel } from '@app/models/TaskModel';
+import { TaskModel, DraggedOn, TaskConstructor } from '@app/models/TaskModel';
 import { ColumnModel } from '@app/models/ColumnModel';
 
 interface BoardProps {
@@ -17,34 +17,115 @@ interface BoardProps {
 
 @observer
 export class Board extends Component<BoardProps> {
-    handleRemoveColumn = (columnId: number) => {
+    handleRemoveColumn = (columnId: number) => () => {
         this.props.board.removeColumn(columnId);
-    }
+    };
 
-    handleTaskDrag = (task: TaskModel, column: ColumnModel) => {
-        this.props.board.setDraggedTask(task, column);
-    }
+    /**
+     * Bubbles up from child {<TaskItem />} onDragStart
+     * @param {ColumnModel} column - The original column from which the task is being dragged off.
+     * @param {TaskModel} task - The task that is currently being dragged.
+     */
+    handleTaskDrag = (column: ColumnModel) => (task: TaskModel) => {
+        this.props.board.setCurrentlyDraggedTask(task, column);
+    };
 
+    handleTaskDragEnd = () => {
+        this.props.board.resetCurrentDrag();
+    };
+
+    /**
+     * @param {ColumnModel} column - The column on which the task was dropped.
+     */
     handleTaskDrop = (column: ColumnModel) => {
         const { board } = this.props;
+        const { currentlyDragged } = board;
 
-        column.copyDragTask(board.dragInfo.task);
-        board.dragInfo.column.removeTask(board.dragInfo.task.id);
-    }
+        if (currentlyDragged.column === column && currentlyDragged.targetIdx !== -1) {
+            const draggedTaskIdx = column.findTaskIdx(currentlyDragged.task.id);
+
+            if (draggedTaskIdx === currentlyDragged.targetIdx) {
+                board.resetCurrentDrag();
+                return;
+            }
+        }
+
+        // Copy the task
+        const copyTarget: TaskConstructor = Object.assign({}, currentlyDragged.task.toConstructorRequest());
+        currentlyDragged.column.removeTask(currentlyDragged.task.id);
+        column.copyDragTask(copyTarget, currentlyDragged.targetIdx);
+
+        // Remove task from previous column and reset drag properties
+        board.resetCurrentDrag();
+    };
+
+    /**
+     * @param {TaskModel} task - The task on which another(dragged) task is currently hovering.
+     * @param {ColumnModel} column - The column to which the task, which is hovered upon, belongs to.
+     * @param {DraggedOn} dragPosition - Specifies whether the task is hovering above or below
+     */
+    handleTaskDragOver = (column: ColumnModel) => (task: TaskModel, dragPosition: DraggedOn) => {
+        const { board } = this.props;
+        const {
+            currentlyDragged: { targetTask },
+            currentlyDragged,
+        } = board;
+
+        const overlayedTaskIdx = column.findTaskIdx(task.id);
+
+        let assignedIndex = overlayedTaskIdx;
+        currentlyDragged.targetIdx = assignedIndex;
+
+        if (board.currentlyDragged.column === column) {
+            const currentTaskIdx = column.findTaskIdx(currentlyDragged.task.id);
+            dragPosition === 'below' &&
+                overlayedTaskIdx !== column.tasks.length &&
+                overlayedTaskIdx < currentTaskIdx &&
+                assignedIndex++;
+            dragPosition === 'above' && overlayedTaskIdx !== 0 && overlayedTaskIdx > currentTaskIdx && assignedIndex--;
+
+            currentlyDragged.targetIdx = assignedIndex;
+            if (assignedIndex === currentTaskIdx) {
+                task.setDraggedOn(null);
+                currentlyDragged.targetIdx = -1;
+                return;
+            }
+        } else {
+            dragPosition === 'below' && assignedIndex++;
+            currentlyDragged.targetIdx = assignedIndex;
+        }
+
+        // If it's the same task - no need for actions
+        if (targetTask === task) {
+            targetTask.draggedOn = dragPosition;
+            return;
+        }
+
+        // Reset previous target since we got a new over drag
+        if (targetTask) {
+            targetTask.setDraggedOn(null);
+        }
+
+        // Assign new target
+        task.setDraggedOn(dragPosition);
+        currentlyDragged.targetTask = task;
+    };
 
     renderColumnList = () => {
         const { board } = this.props;
 
-        return board.columns.map((c, idx) =>
+        return board.columns.map((c, idx) => (
             <ColumnItem
                 key={idx}
                 column={c}
-                dragInfo={board.dragInfo}
+                currentlyDragged={board.currentlyDragged}
                 onRemoveColumn={this.handleRemoveColumn}
                 onTaskDragStart={this.handleTaskDrag}
                 onTaskDragDrop={this.handleTaskDrop}
+                onTaskDragOver={this.handleTaskDragOver}
+                onTaskDragEnd={this.handleTaskDragEnd}
             />
-        );
+        ));
     };
 
     onAddColumn = () => {
@@ -63,9 +144,7 @@ export class Board extends Component<BoardProps> {
                 <Button primary onClick={this.onAddColumn} icon={<Icon path={mdiPlus} />}>
                     Add a column
                 </Button>
-                <div className={styles.boardColumnList}>
-                    {this.renderColumnList()}
-                </div>
+                <div className={styles.boardColumnList}>{this.renderColumnList()}</div>
             </Col>
         );
     }
