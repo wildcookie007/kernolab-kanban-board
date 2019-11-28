@@ -1,19 +1,17 @@
 /* eslint-disable no-console */
 const webpack = require('webpack');
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const WebpackGitHash = require('webpack-git-hash');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-
-const path = require('path');
-
 const helpers = require('./webpack-helpers');
+
 const config = require('config');
 const bundleConfig = config.get('bundle');
 const metadataConfig = config.get('metadata');
-const apiConfig = config.get('api');
 
 const isProductionEnvironment = metadataConfig.environment === 'production';
 const isDevelopmentEnvironment = metadataConfig.environment === 'development';
@@ -23,13 +21,13 @@ console.log(`Application instance: ${config.util.getEnv('NODE_APP_INSTANCE')}`);
 
 const productionPlugins = [
     new WebpackGitHash({
-        cleanup: true
+        cleanup: true,
     }),
 
     new MiniCssExtractPlugin({
-        filename: '[name].css'
+        filename: '[name].css',
     }),
-    new OptimizeCssAssetsPlugin()
+    new OptimizeCssAssetsPlugin(),
 ];
 
 const localDevelopmentPlugins = [new webpack.HotModuleReplacementPlugin()];
@@ -39,54 +37,51 @@ const generalPlugins = [
 
     new webpack.DefinePlugin({
         'process.env': {
-            NODE_ENV: JSON.stringify(metadataConfig.environment)
+            NODE_ENV: JSON.stringify(metadataConfig.environment),
         },
 
         APP_DATA: Object.assign(
             {},
             {
                 metadata: JSON.stringify(metadataConfig),
-                api: JSON.stringify(apiConfig),
-            }
-        )
+            },
+        ),
     }),
 
-    new webpack.WatchIgnorePlugin([
-        /scss\.d\.ts$/
-    ]),
+    new webpack.WatchIgnorePlugin([/scss\.d\.ts$/]),
 
     new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, `../${bundleConfig.sources}/index.html`)
+        template: path.resolve(__dirname, `../${bundleConfig.sources}/index.html`),
     }),
 
     new AddAssetHtmlPlugin({
-        filepath: path.resolve(__dirname, `../${bundleConfig.output}/vendor.*.dll.js`)
+        filepath: path.resolve(__dirname, `../${bundleConfig.output}/vendor.*.dll.js`),
     }),
 
     new webpack.DllReferencePlugin({
-        manifest: helpers.loadDLLManifest() && helpers.VENDOR_MANIFEST_PATH
-    })
+        manifest: helpers.loadDLLManifest() && helpers.VENDOR_MANIFEST_PATH,
+    }),
 ];
 
 const webpackConfig = {
     mode: ['production', 'development'].includes(metadataConfig.environment)
         ? metadataConfig.environment
         : metadataConfig.environment === 'local-development'
-            ? 'development'
-            : 'none',
+        ? 'development'
+        : 'none',
     entry: {
-        bundle: [path.resolve(__dirname, `../${bundleConfig.entrypoint}`)]
+        bundle: [path.resolve(__dirname, `../${bundleConfig.entrypoint}`)],
     },
 
     stats: {
-        children: false
+        children: false,
     },
 
     node: {
         console: true,
         fs: 'empty',
         net: 'empty',
-        tls: 'empty'
+        tls: 'empty',
     },
 
     optimization: {
@@ -95,12 +90,12 @@ const webpackConfig = {
                 uglifyOptions: {
                     ecma: 8,
                     compress: {
-                        inline: false
-                    }
+                        inline: false,
+                    },
                 },
 
-                parallel: true
-            })
+                parallel: true,
+            }),
         ],
 
         splitChunks: {
@@ -109,24 +104,24 @@ const webpackConfig = {
                     name: 'styles',
                     test: /\.css$/,
                     chunks: 'all',
-                    enforce: true
+                    enforce: true,
                 },
                 js: {
                     name: 'js',
                     test: /\.js$/,
                     chunks: 'all',
-                    enforce: true
-                }
-            }
-        }
+                    enforce: true,
+                },
+            },
+        },
     },
 
     output: {
         path: path.resolve(__dirname, `../${bundleConfig.output}`),
         filename: isProductionEnvironment || isDevelopmentEnvironment ? '[name].[githash].js' : '[name].js',
         chunkFilename:
-			isProductionEnvironment || isDevelopmentEnvironment ? '[name].[githash].chunk.js' : '[name].chunk.js',
-        publicPath: '/'
+            isProductionEnvironment || isDevelopmentEnvironment ? '[name].[githash].chunk.js' : '[name].chunk.js',
+        publicPath: '/',
     },
 
     resolve: {
@@ -134,9 +129,10 @@ const webpackConfig = {
 
         alias: {
             ...helpers.loadTypescriptAlias(),
-            'babel-core': path.resolve(path.join(__dirname, '../node_modules/@babel/core'))
+            'babel-core': path.resolve(path.join(__dirname, '../node_modules/@babel/core')),
+            'react-dom': '@hot-loader/react-dom',
         },
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
 
     module: {
@@ -149,20 +145,18 @@ const webpackConfig = {
                 loader: 'eslint-loader',
                 options: {
                     configFile: path.resolve(__dirname, '../.eslintrc.json'),
-                    jsConfigFile: path.resolve(__dirname, '../jsconfig.json')
-                }
+                    jsConfigFile: path.resolve(__dirname, '../jsconfig.json'),
+                },
             },
 
             {
                 test: /\.([jt])sx?/,
-                include: [
-                    path.resolve(__dirname, `../${bundleConfig.sources}`)
-                ],
+                include: [path.resolve(__dirname, `../${bundleConfig.sources}`)],
                 exclude: [
                     /\.mock\.([jt])s?/,
                     /\.mock\.helpers\.([jt])s?/,
                     /\.(test|spec)\.helpers([jt])s?/,
-                    /\.(test|spec)\.([jt])s?/
+                    /\.(test|spec)\.([jt])s?/,
                 ],
                 use: [
                     // babel-loader included to enable usage of react-hot-loader
@@ -178,19 +172,19 @@ const webpackConfig = {
                                 ['@babel/plugin-proposal-decorators', { legacy: true }],
                                 ['@babel/proposal-class-properties', { loose: true }],
                                 '@babel/plugin-proposal-object-rest-spread',
-                                'react-hot-loader/babel'
-                            ]
-                        }
+                                'react-hot-loader/babel',
+                            ],
+                        },
                     },
                     {
                         loader: 'ts-loader',
                         options: {
                             configFile: isProductionEnvironment
                                 ? path.resolve(__dirname, `../tsconfig.json`)
-                                : path.resolve(__dirname, `../tsconfig.dev.json`)
-                        }
-                    }
-                ]
+                                : path.resolve(__dirname, `../tsconfig.dev.json`),
+                        },
+                    },
+                ],
             },
 
             {
@@ -206,38 +200,38 @@ const webpackConfig = {
                             sourceMap: isLocalEnvironment,
                             modules: true,
                             minimize: true,
-                            localIdentName: '[hash:base64:7]'
-                        }
+                            localIdentName: '[hash:base64:7]',
+                        },
                     },
 
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: isLocalEnvironment
-                        }
+                            sourceMap: isLocalEnvironment,
+                        },
                     },
 
                     {
                         loader: 'sass-resources-loader',
                         options: {
-                            resources: 'app/styles/settings/_variables.scss'
-                        }
-                    }
-                ]
+                            resources: 'app/styles/settings/_variables.scss',
+                        },
+                    },
+                ],
             },
-			
+
             {
                 test: /\.(jpg|png|woff|woff2|eot|ttf|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'file-loader',
                 options: {
-                    name: '[name].[ext]'
-                }
-            }
-        ]
+                    name: '[name].[ext]',
+                },
+            },
+        ],
     },
     devServer: {
-        historyApiFallback: true
-    }
+        historyApiFallback: true,
+    },
 };
 
 if (isProductionEnvironment || isDevelopmentEnvironment) {

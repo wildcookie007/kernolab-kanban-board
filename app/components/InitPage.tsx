@@ -7,16 +7,16 @@ import { ErrorModal } from './shared/ErrorModal';
 import { NotificationStore } from '@app/stores/notificationStore';
 
 interface InitPageProps {
-    tokenService?: StorageService;
+    storageService?: StorageService;
     notificationStore?: NotificationStore;
 }
 
-@inject('tokenService', 'notificationStore')
+@inject('storageService', 'notificationStore')
 @observer
 export class InitPage extends Component<InitPageProps> {
     async componentDidMount() {
-        const { tokenService } = this.props;
-        tokenService.setAppLoaded();
+        const { storageService } = this.props;
+        storageService.setAppLoaded();
     }
 
     handleCloseErrorModal = () => {
@@ -37,8 +37,8 @@ export class InitPage extends Component<InitPageProps> {
     };
 
     render() {
-        const { tokenService } = this.props;
-        const { appLoading, appLoaded } = tokenService;
+        const { storageService } = this.props;
+        const { appLoading, appLoaded } = storageService;
 
         if (appLoading || !appLoaded) {
             return <LoadingSpinner />;
