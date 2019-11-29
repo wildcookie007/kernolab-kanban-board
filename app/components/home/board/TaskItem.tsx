@@ -60,7 +60,7 @@ export const TaskItem = React.memo(
             const containerTop = e.currentTarget.getBoundingClientRect().top;
 
             // Subtracts current hovered Y position from the Column Container's top value
-            // and compares the result to a single container task height divided by too
+            // and compares the result to a single container task height divided by two
             // in order to determine whether the position is above or below the task
             const dragPosition = currentPosition - containerTop > taskHeight / 2 ? 'below' : 'above';
             if (!task.draggedOn || (task.draggedOn && task.draggedOn !== dragPosition)) {
