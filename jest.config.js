@@ -8,6 +8,9 @@ module.exports = {
     testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?)$',
     testPathIgnorePatterns: ['/node_modules/', '/__tests__/mock/'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-    moduleNameMapper,
+    moduleNameMapper: {
+        '\\.(css|scss)$': '<rootDir>/__mocks__/styles.ts',
+        ...moduleNameMapper,
+    },
     globals: { NODE_ENV: 'test' },
 };

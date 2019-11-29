@@ -1,43 +1,36 @@
 {
-	"compilerOptions": {
-		"jsx": "react",
-		"allowJs": true,
-		"importHelpers": true,
-		"module": "esnext",
-		"resolveJsonModule": true,
-		"moduleResolution": "node",
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"noUnusedLocals": true,
-		"noImplicitAny": false,
-		"skipLibCheck": true,
-        "sourceMap": true,
-		"outDir": "./build/",
-        "target": "es2016",
-		"lib": [
-			"es2015",
-			"es2016",
-			"es2017",
-			"es2018.promise",
-			"dom"
-		],
+  "compilerOptions": {
+    "jsx": "react",
+    "allowJs": true,
+    "importHelpers": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "outDir": "./build/",
+    "target": "es2016",
+    "lib": ["es2015", "es2016", "es2017", "es2018.promise", "dom"],
 
-		"baseUrl": ".",
-		"paths": {
-			"@app/*": [ "app/*" ],
-			"@resources/*": [ "resources/*" ]
-		},
-		"rootDirs": [
-            "."
-        ]
-	},
-	"exclude": [
-		"node_modules",
-		"modules",
-		"public",
-		"scripts",
-		"dist",
-        "coverage"
-    ],
-    "include": ["app/**/*", "typings/**/*"]
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@resources/*": ["resources/*"]
+    },
+    "rootDirs": ["."]
+  },
+  "exclude": [
+    "node_modules",
+    "modules",
+    "public",
+    "scripts",
+    "dist",
+    "coverage"
+  ],
+  "include": ["app/**/*", "typings/**/*"]
 }
