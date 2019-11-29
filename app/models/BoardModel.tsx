@@ -64,9 +64,7 @@ export class BoardModel {
 
         // Reset all task margin styling
         for (const column of this.columns) {
-            for (const task of column.tasks) {
-                task.setDraggedOn(null);
-            }
+            column.tasks.forEach((t) => t.setDraggedOn(null));
         }
     };
 
