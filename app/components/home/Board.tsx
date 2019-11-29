@@ -16,15 +16,11 @@ interface BoardProps {
     board: BoardModel;
     onBoardUpdate: () => void;
     onTaskDetails: (task: TaskModel) => (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
+    onColumnRemove: (columnId: number) => () => void;
 }
 
 @observer
 export class Board extends Component<BoardProps> {
-    handleRemoveColumn = (columnId: number) => () => {
-        this.props.board.removeColumn(columnId);
-        this.props.onBoardUpdate();
-    };
-
     /**
      * Bubbles up from child <TaskItem /> onDragStart event
      * @param {ColumnModel} column - The original column from which the task is being dragged off.
@@ -134,7 +130,7 @@ export class Board extends Component<BoardProps> {
                 key={c.id}
                 column={c}
                 currentlyDragged={board.currentlyDragged}
-                onRemoveColumn={this.handleRemoveColumn}
+                onRemoveColumn={this.props.onColumnRemove}
                 onBoardUpdate={this.props.onBoardUpdate}
                 onTaskDragStart={this.handleTaskDrag}
                 onTaskDragDrop={this.handleTaskDrop}

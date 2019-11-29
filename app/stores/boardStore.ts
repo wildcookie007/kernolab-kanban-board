@@ -7,6 +7,9 @@ export class BoardStore {
     private readonly _localSaveKey = '_kernoboard';
     @observable board: BoardModel;
     @observable isTaskModalVisible = false;
+    @observable isColumnRemoveModalVisible = false;
+
+    @observable columnModalDetails: number;
 
     @observable taskModalDetailsReference: TaskModel;
     @observable taskModalDetails: TaskModel;
@@ -36,6 +39,18 @@ export class BoardStore {
 
         this.taskModalDetailsReference.title.value = newTitle ? newTitle : oldTitle;
         this.taskModalDetailsReference.description.value = newDescription;
+    }
+
+    @action setRemoveColumnModalDetails(columnId: number) {
+        this.columnModalDetails = columnId;
+    }
+
+    @action setRemoveColumnModalVisible(value: boolean) {
+        this.isColumnRemoveModalVisible = value;
+    }
+
+    @action removeColumn() {
+        this.board.removeColumn(this.columnModalDetails);
     }
 
     @action setTaskModalVisible(value: boolean) {

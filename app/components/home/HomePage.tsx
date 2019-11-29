@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { BoardStore } from '@app/stores/boardStore';
 import { TaskModel } from '@app/models/TaskModel';
 import { TaskDetailsModal } from './TaskDetailsModal';
+import { ColumnRemoveModal } from './ColumnRemoveModal';
 
 interface HomePageProps {
     boardStore: BoardStore;
@@ -26,13 +27,35 @@ export class HomePage extends Component<HomePageProps> {
         this.props.boardStore.saveBoard();
     };
 
+    handleColumnRemoveModal = (columnId: number) => () => {
+        const { boardStore } = this.props;
+
+        boardStore.setRemoveColumnModalDetails(columnId);
+        boardStore.setRemoveColumnModalVisible(true);
+    }
+
+    handleColumnRemoveModalConfirm = () => {
+        const { boardStore } = this.props;
+
+        boardStore.setRemoveColumnModalVisible(false);
+        boardStore.removeColumn();
+        boardStore.saveBoard();
+    };
+
+    handleColumnRemoveModalClose = () => {
+        this.props.boardStore.setRemoveColumnModalVisible(false);
+    }
+
     handleTaskDetails = (task: TaskModel) => () => {
-        this.props.boardStore.setTaskModalDetails(task);
-        this.props.boardStore.setTaskModalVisible(true);
+        const { boardStore } = this.props;
+
+        boardStore.setTaskModalDetails(task);
+        boardStore.setTaskModalVisible(true);
     };
 
     handleTaskDetailsModalClose = () => {
         const { boardStore } = this.props;
+
         boardStore.setTaskModalVisible(false);
         boardStore.setTaskModalDetails(null);
     }
@@ -47,7 +70,7 @@ export class HomePage extends Component<HomePageProps> {
     };
 
     render() {
-        const { boardStore: { board, isTaskModalVisible, taskModalDetails } } = this.props;
+        const { boardStore: { board, isTaskModalVisible, taskModalDetails, isColumnRemoveModalVisible } } = this.props;
 
         return (
             <Col xxl={24} className={styles.homeContainer}>
@@ -58,12 +81,18 @@ export class HomePage extends Component<HomePageProps> {
                     board={board}
                     onBoardUpdate={this.handleSaveBoard}
                     onTaskDetails={this.handleTaskDetails}
+                    onColumnRemove={this.handleColumnRemoveModal}
                 />
                 <TaskDetailsModal
                     visible={isTaskModalVisible}
                     details={taskModalDetails}
                     onSave={this.handleSaveTask}
                     onClose={this.handleTaskDetailsModalClose}
+                />
+                <ColumnRemoveModal
+                    visible={isColumnRemoveModalVisible}
+                    onClose={this.handleColumnRemoveModalClose}
+                    onConfirm={this.handleColumnRemoveModalConfirm}
                 />
             </Col>
         );
