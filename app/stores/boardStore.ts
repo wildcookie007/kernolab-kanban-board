@@ -1,10 +1,15 @@
 import { observable, action } from 'mobx';
 import { BoardModel, BoardConstructor } from '@app/models/BoardModel';
 import { StorageService } from '@app/services/storageService';
+import { TaskModel } from '@app/models/TaskModel';
 
 export class BoardStore {
     private readonly _localSaveKey = '_kernoboard';
     @observable board: BoardModel;
+    @observable isTaskModalVisible = false;
+
+    @observable taskModalDetailsReference: TaskModel;
+    @observable taskModalDetails: TaskModel;
 
     constructor(private readonly _storageService: StorageService) { }
 
@@ -21,5 +26,25 @@ export class BoardStore {
 
     saveBoard() {
         this._storageService.save(this._localSaveKey, JSON.stringify(this.board.toSaveRequest()));
+    }
+
+    saveTaskDetails() {
+        const oldTitle = this.taskModalDetailsReference.title.value;
+
+        const newTitle = this.taskModalDetails.title.value;
+        const newDescription = this.taskModalDetails.description.value;
+
+        this.taskModalDetailsReference.title.value = newTitle ? newTitle : oldTitle;
+        this.taskModalDetailsReference.description.value = newDescription;
+    }
+
+    @action setTaskModalVisible(value: boolean) {
+        this.isTaskModalVisible = value;
+    }
+
+    // Clone class
+    @action setTaskModalDetails(value: TaskModel) {
+        this.taskModalDetailsReference = value;
+        this.taskModalDetails = value ? Object.assign({}, new TaskModel(null, value.toConstructorRequest())) : null;
     }
 }

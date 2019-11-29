@@ -15,6 +15,7 @@ import { action } from 'mobx';
 interface BoardProps {
     board: BoardModel;
     onBoardUpdate: () => void;
+    onTaskDetails: (task: TaskModel) => (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
 }
 
 @observer
@@ -140,6 +141,7 @@ export class Board extends Component<BoardProps> {
                 onTaskDragOver={this.handleTaskDragOver}
                 onColumnDragOver={this.handleColumnDragOver}
                 onTaskDragEnd={this.handleTaskDragEnd}
+                onTaskDetails={this.props.onTaskDetails}
             />
         ));
     };

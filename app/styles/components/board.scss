@@ -73,16 +73,21 @@
                     cursor: default;
                 }
 
-                > span {
+                > div {
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    display: block;
                     white-space: nowrap;
                     font-size: $fontlarge;
 
-                    > span {
+                    > span:first-child {
                         padding-right: 0.5em;
                         color: #9e9e9e;
+                    }
+
+                    > span + span:hover {
+                        text-decoration: underline;
+                        text-decoration-color: $text-black;
+                        cursor: pointer;
                     }
                 }
             }

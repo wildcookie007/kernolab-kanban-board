@@ -18,6 +18,7 @@ interface ColumnItemProps {
     onTaskDragDrop: (column: ColumnModel) => void;
     onTaskDragOver: (column: ColumnModel) => (task: TaskModel, position: DraggedOn) => void;
     onColumnDragOver: (column: ColumnModel) => void;
+    onTaskDetails: (task: TaskModel) => (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
     onTaskDragEnd: () => void;
     onBoardUpdate: () => void;
 }
@@ -42,6 +43,7 @@ export const ColumnItem = React.memo(
                             onTaskDragOver={props.onTaskDragOver(column)}
                             onTaskDragEnd={props.onTaskDragEnd}
                             onTaskInitialized={onTaskInitialized}
+                            onTaskDetails={props.onTaskDetails}
                         />
                     ))}
                 </div>

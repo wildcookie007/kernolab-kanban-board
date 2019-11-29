@@ -19,7 +19,6 @@
     border-radius: 4px;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
-    border: 0;
 
     color: rgba($active-input-text, 0.85);
     background-color: #fff;
@@ -27,6 +26,7 @@
 
     &.textarea {
         resize: none;
+        min-height: 64px;
     }
 
     &.bordered {

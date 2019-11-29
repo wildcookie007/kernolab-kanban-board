@@ -15,6 +15,7 @@ interface TaskItemProps {
     onTaskDragOver: (task: TaskModel, dragPosition: DraggedOn) => void;
     onTaskDragEnd: () => void;
     onTaskInitialized: () => void;
+    onTaskDetails: (task: TaskModel) => (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
 }
 
 export const TaskItem = React.memo(
@@ -88,11 +89,12 @@ export const TaskItem = React.memo(
                         <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
                     </>
                 ) : (
-                    <span>
+
+                    <div>
                         <span>#{task.id}</span>
-                        {task.title.value}
+                        <span onClick={props.onTaskDetails(task)}>{task.title.value}</span>
                         <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
-                    </span>
+                    </div>
                 )}
             </div>
         );
