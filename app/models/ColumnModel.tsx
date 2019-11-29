@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import { TaskModel, TaskConstructor, DraggedOn } from './TaskModel';
 import { ValidationFieldModel } from './ValidationFieldModel';
 import { BoardModel } from './BoardModel';
+import moment from 'moment';
 
 export interface ColumnConstructor {
     id: number;
@@ -47,6 +48,7 @@ export class ColumnModel {
 
     @action copyDroppedTask = (task: TaskConstructor, targetIdx: number) => {
         // We dont want to mutate the original object and need all of the TaskModel properties included
+        task.updatedAt = moment().unix();
         const taskCopy = new TaskModel(null, task);
 
         if (targetIdx !== -1 && targetIdx !== this.tasks.length && targetIdx !== undefined) {

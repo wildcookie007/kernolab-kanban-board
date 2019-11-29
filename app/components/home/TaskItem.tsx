@@ -7,6 +7,7 @@ import { jClass } from '@app/utils/utils';
 import { Icon } from '../shared/Icon';
 import { mdiDelete } from '@mdi/js';
 import { Button } from '../shared/Button';
+import { Link } from 'react-router-dom';
 
 interface TaskItemProps {
     task: TaskModel;
@@ -29,11 +30,12 @@ export const TaskItem = React.memo(
                 return;
             }
 
+            task.setInitialized();
             props.onTaskInitialized();
-            task.setInitialized(true);
         };
 
-        const onTaskRemove = () => {
+        const onTaskRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation();
             props.onTaskRemove(task.id);
             props.onTaskInitialized();
         };
@@ -74,6 +76,7 @@ export const TaskItem = React.memo(
                 onDragOver={onDragOver}
                 onDragEnd={props.onTaskDragEnd}
                 draggable={task.initialized}
+                onClick={task.initialized && props.onTaskDetails(task) || undefined}
             >
                 {!task.initialized ? (
                     <>
@@ -89,10 +92,11 @@ export const TaskItem = React.memo(
                         <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
                     </>
                 ) : (
-
                     <div>
                         <span>#{task.id}</span>
-                        <span onClick={props.onTaskDetails(task)}>{task.title.value}</span>
+                        <Link to={`/task/${task.id}`}>
+                            <span>{task.title.value}</span>
+                        </Link>
                         <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
                     </div>
                 )}

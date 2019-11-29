@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { BoardStore } from '@app/stores/boardStore';
 import { TaskModel } from '@app/models/TaskModel';
 import { TaskDetailsModal } from './TaskDetailsModal';
-import { ColumnRemoveModal } from './ColumnRemoveModal';
+import { DiscardModal } from '../shared/DiscardModal';
 
 interface HomePageProps {
     boardStore: BoardStore;
@@ -15,10 +15,6 @@ interface HomePageProps {
 @inject('boardStore')
 @observer
 export class HomePage extends Component<HomePageProps> {
-    componentDidMount() {
-        this.props.boardStore.loadBoard();
-    }
-
     componentWillUnmount() {
         this.handleTaskDetailsModalClose();
     }
@@ -31,19 +27,19 @@ export class HomePage extends Component<HomePageProps> {
         const { boardStore } = this.props;
 
         boardStore.setRemoveColumnModalDetails(columnId);
-        boardStore.setRemoveColumnModalVisible(true);
+        boardStore.setDiscardModalVisible(true);
     }
 
     handleColumnRemoveModalConfirm = () => {
         const { boardStore } = this.props;
 
-        boardStore.setRemoveColumnModalVisible(false);
+        boardStore.setDiscardModalVisible(false);
         boardStore.removeColumn();
         boardStore.saveBoard();
     };
 
     handleColumnRemoveModalClose = () => {
-        this.props.boardStore.setRemoveColumnModalVisible(false);
+        this.props.boardStore.setDiscardModalVisible(false);
     }
 
     handleTaskDetails = (task: TaskModel) => () => {
@@ -70,7 +66,12 @@ export class HomePage extends Component<HomePageProps> {
     };
 
     render() {
-        const { boardStore: { board, isTaskModalVisible, taskModalDetails, isColumnRemoveModalVisible } } = this.props;
+        const { boardStore: {
+            board,
+            isTaskModalVisible,
+            taskModalDetails,
+            isDiscardModalVisible: isColumnRemoveModalVisible
+        } } = this.props;
 
         return (
             <Col xxl={24} className={styles.homeContainer}>
@@ -89,7 +90,7 @@ export class HomePage extends Component<HomePageProps> {
                     onSave={this.handleSaveTask}
                     onClose={this.handleTaskDetailsModalClose}
                 />
-                <ColumnRemoveModal
+                <DiscardModal
                     visible={isColumnRemoveModalVisible}
                     onClose={this.handleColumnRemoveModalClose}
                     onConfirm={this.handleColumnRemoveModalConfirm}

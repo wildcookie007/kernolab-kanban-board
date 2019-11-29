@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Modal } from '../shared/Modal';
+import { Modal } from './Modal';
 
-interface ColumnRemoveModalProps {
+interface DiscardModalProps {
     visible: boolean;
     onConfirm: () => void;
     onClose: () => void;
 }
 
-export const ColumnRemoveModal = React.memo(observer((props: ColumnRemoveModalProps) => {
+export const DiscardModal = React.memo(observer((props: DiscardModalProps) => {
     const { visible } = props;
 
     return (
@@ -25,7 +25,7 @@ export const ColumnRemoveModal = React.memo(observer((props: ColumnRemoveModalPr
                 Are you sure?
             </Modal.Header>
             <Modal.Body>
-                You are about to discard this column.
+                You are about to discard this component.
             </Modal.Body>
         </Modal>
     );

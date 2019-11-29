@@ -2,12 +2,14 @@ import { observable, action } from 'mobx';
 import { BoardModel, BoardConstructor } from '@app/models/BoardModel';
 import { StorageService } from '@app/services/storageService';
 import { TaskModel } from '@app/models/TaskModel';
+import moment from 'moment';
 
 export class BoardStore {
     private readonly _localSaveKey = '_kernoboard';
     @observable board: BoardModel;
+
     @observable isTaskModalVisible = false;
-    @observable isColumnRemoveModalVisible = false;
+    @observable isDiscardModalVisible = false;
 
     @observable columnModalDetails: number;
 
@@ -39,14 +41,15 @@ export class BoardStore {
 
         this.taskModalDetailsReference.title.value = newTitle ? newTitle : oldTitle;
         this.taskModalDetailsReference.description.value = newDescription;
+        this.taskModalDetailsReference.updatedAt = moment().unix();
     }
 
     @action setRemoveColumnModalDetails(columnId: number) {
         this.columnModalDetails = columnId;
     }
 
-    @action setRemoveColumnModalVisible(value: boolean) {
-        this.isColumnRemoveModalVisible = value;
+    @action setDiscardModalVisible(value: boolean) {
+        this.isDiscardModalVisible = value;
     }
 
     @action removeColumn() {

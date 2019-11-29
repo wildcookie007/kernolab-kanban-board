@@ -1,17 +1,17 @@
 import { StorageService } from './storageService';
-import { NotificationStore } from '@app/stores/notificationStore';
 import { BoardStore } from '@app/stores/boardStore';
+import { InitStore } from '@app/stores/initStore';
 
 interface Providers {
-    notificationStore: NotificationStore;
     boardStore: BoardStore;
+    initStore: InitStore;
 }
 
 const storageService = new StorageService();
+const initStore = new InitStore();
 const boardStore = new BoardStore(storageService);
-const notificationStore = new NotificationStore();
 
 export const providers: Providers = {
-    notificationStore,
-    boardStore
+    boardStore,
+    initStore
 };

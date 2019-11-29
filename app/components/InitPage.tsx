@@ -2,40 +2,31 @@ import React, { Component } from 'react';
 import { StorageService } from '@app/services/storageService';
 import { inject, observer } from 'mobx-react';
 import { RouterMain } from './router';
-import { ErrorModal } from './shared/ErrorModal';
-import { NotificationStore } from '@app/stores/notificationStore';
+import { BoardStore } from '@app/stores/boardStore';
+import LoadingSpinner from './shared/LoadingSpinner';
+import { InitStore } from '@app/stores/initStore';
 
 interface InitPageProps {
     storageService?: StorageService;
-    notificationStore?: NotificationStore;
+    boardStore?: BoardStore;
+    initStore?: InitStore;
 }
 
-@inject('notificationStore')
+@inject('boardStore', 'initStore')
 @observer
 export class InitPage extends Component<InitPageProps> {
-    handleCloseErrorModal = () => {
-        this.props.notificationStore.setMessage(null);
+    componentDidMount() {
+        const { initStore, boardStore } = this.props;
+        boardStore.loadBoard();
+        initStore.setAppLoaded();
     }
 
-    renderError = (): JSX.Element => {
-        const { message, hasMessage } = this.props.notificationStore;
-        if (hasMessage) {
-            return (
-                <ErrorModal
-                    message={message}
-                    hasMessage={hasMessage}
-                    onClose={this.handleCloseErrorModal}
-                />
-            );
-        }
-    };
-
     render() {
-        return (
-            <>
-                <RouterMain />
-                {this.renderError()}
-            </>
-        );
+        const { initStore } = this.props;
+        if (!initStore.isAppLoaded || initStore.isAppLoading) {
+            return <LoadingSpinner />;
+        }
+
+        return <RouterMain />;
     }
 }
