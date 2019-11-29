@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { BoardModel } from '@app/models/BoardModel';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { Col } from '../shared/Col';
+import LoadingSpinner from '../../shared/LoadingSpinner';
+import { Col } from '../../shared/Col';
 import * as styles from '@app/styles/components/board.scss';
 import { ColumnItem } from './ColumnItem';
-import { Button } from '../shared/Button';
+import { Button } from '../../shared/Button';
 import { mdiPlus } from '@mdi/js';
-import { Icon } from '../shared/Icon';
+import { Icon } from '../../shared/Icon';
 import { observer } from 'mobx-react';
 import { TaskModel, DraggedOn, TaskConstructor } from '@app/models/TaskModel';
 import { ColumnModel } from '@app/models/ColumnModel';

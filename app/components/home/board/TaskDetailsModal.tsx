@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Modal } from '../shared/Modal';
+import { Modal } from '../../shared/Modal';
 import { TaskModel } from '@app/models/TaskModel';
-import { Input } from '../shared/Input';
+import { Input } from '../../shared/Input';
 
 interface TaskDetailsModalProps {
     visible: boolean;

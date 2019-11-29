@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Col } from '../shared/Col';
 import * as styles from '@app/styles/components/home.scss';
-import { Board } from './Board';
+import { Board } from './board/Board';
 import { inject, observer } from 'mobx-react';
 import { BoardStore } from '@app/stores/boardStore';
 import { TaskModel } from '@app/models/TaskModel';
-import { TaskDetailsModal } from './TaskDetailsModal';
+import { TaskDetailsModal } from './board/TaskDetailsModal';
 import { DiscardModal } from '../shared/DiscardModal';
 
 interface HomePageProps {

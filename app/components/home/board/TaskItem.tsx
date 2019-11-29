@@ -2,11 +2,11 @@ import React from 'react';
 import { TaskModel, DraggedOn } from '@app/models/TaskModel';
 import { observer } from 'mobx-react';
 import * as styles from '@app/styles/components/board.scss';
-import { Input } from '../shared/Input';
+import { Input } from '../../shared/Input';
 import { jClass } from '@app/utils/utils';
-import { Icon } from '../shared/Icon';
+import { Icon } from '../../shared/Icon';
 import { mdiDelete } from '@mdi/js';
-import { Button } from '../shared/Button';
+import { Button } from '../../shared/Button';
 import { Link } from 'react-router-dom';
 
 interface TaskItemProps {
