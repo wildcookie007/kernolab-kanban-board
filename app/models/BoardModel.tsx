@@ -15,6 +15,7 @@ export class CurrentlyDraggedModel {
 
     // Dragged over
     targetTask: TaskModel;
+    targetColumn: ColumnModel;
     targetIdx: number;
 
     constructor(task: TaskModel, column: ColumnModel) {

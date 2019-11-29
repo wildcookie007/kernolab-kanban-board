@@ -110,6 +110,19 @@ export class Board extends Component<BoardProps> {
         // Assign new target
         task.setDraggedOn(dragPosition);
         currentlyDragged.targetTask = task;
+        currentlyDragged.targetColumn = column;
+    };
+
+    @action handleColumnDragOver = (column: ColumnModel) => {
+        const { currentlyDragged } = this.props.board;
+        if (currentlyDragged.targetColumn !== column) {
+            currentlyDragged.targetColumn = column;
+
+            if (currentlyDragged.targetTask) {
+                currentlyDragged.targetTask.setDraggedOn(null);
+                currentlyDragged.targetIdx = -1;
+            }
+        };
     };
 
     renderColumnList = () => {
@@ -125,6 +138,7 @@ export class Board extends Component<BoardProps> {
                 onTaskDragStart={this.handleTaskDrag}
                 onTaskDragDrop={this.handleTaskDrop}
                 onTaskDragOver={this.handleTaskDragOver}
+                onColumnDragOver={this.handleColumnDragOver}
                 onTaskDragEnd={this.handleTaskDragEnd}
             />
         ));

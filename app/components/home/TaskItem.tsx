@@ -52,7 +52,7 @@ export const TaskItem = React.memo(
             }
 
             // Bad idea to put height here, but per say its not gonna change since task item height is fixed.
-            const taskHeight = 34;
+            const taskHeight = 40;
             const currentPosition = e.clientY;
             const containerTop = e.currentTarget.getBoundingClientRect().top;
 
@@ -91,6 +91,7 @@ export const TaskItem = React.memo(
                     <span>
                         <span>#{task.id}</span>
                         {task.title.value}
+                        <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
                     </span>
                 )}
             </div>

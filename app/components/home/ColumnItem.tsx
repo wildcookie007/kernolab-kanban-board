@@ -17,6 +17,7 @@ interface ColumnItemProps {
     onTaskDragStart: (column: ColumnModel) => (task: TaskModel) => void;
     onTaskDragDrop: (column: ColumnModel) => void;
     onTaskDragOver: (column: ColumnModel) => (task: TaskModel, position: DraggedOn) => void;
+    onColumnDragOver: (column: ColumnModel) => void;
     onTaskDragEnd: () => void;
     onBoardUpdate: () => void;
 }
@@ -54,6 +55,7 @@ export const ColumnItem = React.memo(
 
         const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
+            props.onColumnDragOver(column);
         };
 
         const handleOnDrop = (e: React.DragEvent<HTMLDivElement>) => {
