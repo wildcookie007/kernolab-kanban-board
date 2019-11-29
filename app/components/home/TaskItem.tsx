@@ -23,13 +23,18 @@ export const TaskItem = React.memo(
 
         const handleSave = () => {
             task.title.setTouched();
+
             if (!task.title.isValid) {
-                props.onTaskRemove(task.id);
                 return;
             }
 
             props.onTaskInitialized();
             task.setInitialized(true);
+        };
+
+        const onTaskRemove = () => {
+            props.onTaskRemove(task.id);
+            props.onTaskInitialized();
         };
 
         const onDragStart = (_e: React.DragEvent<HTMLDivElement>) => {
@@ -80,7 +85,7 @@ export const TaskItem = React.memo(
                             onBlur={handleSave}
                             onPressEnter={handleSave}
                         />
-                        <Button transparent floated='right' icon={<Icon path={mdiDelete} />} />
+                        <Button transparent floated='right' onClick={onTaskRemove} icon={<Icon path={mdiDelete} />} />
                     </>
                 ) : (
                     <span>

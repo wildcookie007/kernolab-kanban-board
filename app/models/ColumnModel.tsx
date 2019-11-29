@@ -3,6 +3,12 @@ import { TaskModel, TaskConstructor, DraggedOn } from './TaskModel';
 import { ValidationFieldModel } from './ValidationFieldModel';
 import { BoardModel } from './BoardModel';
 
+export interface ColumnConstructor {
+    id: number;
+    name: string;
+    tasks: TaskConstructor[];
+}
+
 export class ColumnModel {
     id: number;
     @observable initialized = false;
@@ -10,8 +16,24 @@ export class ColumnModel {
     @observable name = new ValidationFieldModel<string>((val) => Boolean(val));
     @observable tasks: TaskModel[] = [];
 
-    constructor(id: number) {
-        this.id = id;
+    constructor(id: number, c?: ColumnConstructor) {
+        if (!c) {
+            this.id = id;
+            return;
+        }
+
+        this.id = c.id;
+        this.name.value = c.name;
+        this.initialized = true;
+        c.tasks.forEach((t) => this.tasks.push(new TaskModel(null, t)));
+    }
+
+    toConstructorRequest(): ColumnConstructor {
+        return {
+            id: this.id,
+            name: this.name.value,
+            tasks: this.tasks.map((t) => t.toConstructorRequest())
+        };
     }
 
     @action addTask = () => {
@@ -24,7 +46,7 @@ export class ColumnModel {
     };
 
     @action copyDroppedTask = (task: TaskConstructor, targetIdx: number) => {
-        // We dont want to mutate the original object
+        // We dont want to mutate the original object and need all of the TaskModel properties included
         const taskCopy = new TaskModel(null, task);
 
         if (targetIdx !== -1 && targetIdx !== this.tasks.length && targetIdx !== undefined) {
@@ -43,6 +65,10 @@ export class ColumnModel {
 
         this.tasks.splice(taskIndex, 1);
     };
+
+    @action setInitialized(value: boolean) {
+        this.initialized = value;
+    }
 
     findTaskIdx(taskId: number): number {
         return this.tasks.findIndex((t) => t.id === taskId);
@@ -67,13 +93,10 @@ export class ColumnModel {
                 break;
             }
             default: {
+                break;
             }
         }
 
         return updatedIndex;
     };
-
-    @action setInitialized(value: boolean) {
-        this.initialized = value;
-    }
 }

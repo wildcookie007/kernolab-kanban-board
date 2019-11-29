@@ -13,8 +13,12 @@ interface HomePageProps {
 @observer
 export class HomePage extends Component<HomePageProps> {
     componentDidMount() {
-        this.props.boardStore.startNewBoard();
+        this.props.boardStore.loadBoard();
     }
+
+    handleSaveBoard = () => {
+        this.props.boardStore.saveBoard();
+    };
 
     render() {
         const { boardStore: { board } } = this.props;
@@ -26,6 +30,7 @@ export class HomePage extends Component<HomePageProps> {
                 </div>
                 <Board
                     board={board}
+                    onBoardUpdate={this.handleSaveBoard}
                 />
             </Col>
         );

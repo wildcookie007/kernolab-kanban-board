@@ -14,12 +14,14 @@ import { action } from 'mobx';
 
 interface BoardProps {
     board: BoardModel;
+    onBoardUpdate: () => void;
 }
 
 @observer
 export class Board extends Component<BoardProps> {
     handleRemoveColumn = (columnId: number) => () => {
         this.props.board.removeColumn(columnId);
+        this.props.onBoardUpdate();
     };
 
     /**
@@ -39,7 +41,7 @@ export class Board extends Component<BoardProps> {
      * @param {ColumnModel} droppedOnColumn - The column on which the task was dropped.
      */
     handleTaskDrop = (droppedOnColumn: ColumnModel) => {
-        const { board } = this.props;
+        const { board, onBoardUpdate } = this.props;
         const { currentlyDragged } = board;
 
         if (
@@ -57,6 +59,8 @@ export class Board extends Component<BoardProps> {
 
         // Remove task from previous column and reset drag properties
         board.resetCurrentDrag();
+
+        onBoardUpdate();
     };
 
     /**
@@ -117,6 +121,7 @@ export class Board extends Component<BoardProps> {
                 column={c}
                 currentlyDragged={board.currentlyDragged}
                 onRemoveColumn={this.handleRemoveColumn}
+                onBoardUpdate={this.props.onBoardUpdate}
                 onTaskDragStart={this.handleTaskDrag}
                 onTaskDragDrop={this.handleTaskDrop}
                 onTaskDragOver={this.handleTaskDragOver}
@@ -131,7 +136,6 @@ export class Board extends Component<BoardProps> {
 
     render() {
         const { board } = this.props;
-
         if (!board) {
             return <LoadingSpinner />;
         }

@@ -1,6 +1,12 @@
-import { ColumnModel } from './ColumnModel';
+import { ColumnModel, ColumnConstructor } from './ColumnModel';
 import { action, observable } from 'mobx';
 import { TaskModel } from './TaskModel';
+
+export interface BoardConstructor {
+    currentColumnId: number;
+    taskId: number;
+    columns: ColumnConstructor[];
+}
 
 export class CurrentlyDraggedModel {
     // Dragged from
@@ -22,6 +28,16 @@ export class BoardModel {
     static taskId = 0;
     @observable columns: ColumnModel[] = [];
     @observable currentlyDragged: CurrentlyDraggedModel;
+
+    constructor(b?: BoardConstructor) {
+        if (!b) {
+            return;
+        }
+
+        this._currentColumnId = b.currentColumnId;
+        BoardModel.taskId = b.taskId;
+        b.columns.forEach((c) => this.columns.push(new ColumnModel(null, c)));
+    }
 
     @action addColumn = () => {
         this.columns.push(new ColumnModel(this._currentColumnId));
@@ -56,5 +72,13 @@ export class BoardModel {
     static get nextTaskId(): number {
         this.taskId++;
         return this.taskId;
+    }
+
+    toSaveRequest(): BoardConstructor {
+        return {
+            currentColumnId: this._currentColumnId,
+            taskId: BoardModel.taskId,
+            columns: this.columns.map((c) => c.toConstructorRequest())
+        };
     }
 }

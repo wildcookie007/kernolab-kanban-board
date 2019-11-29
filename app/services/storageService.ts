@@ -1,11 +1,9 @@
-import { observable, action } from 'mobx';
-
 export class StorageService {
-    @observable appLoaded = false;
-    @observable appLoading = true;
+    save(storageKey: string, value: string) {
+        window.localStorage.setItem(storageKey, value);
+    }
 
-    @action setAppLoaded() {
-        this.appLoaded = true;
-        this.appLoading = false;
+    fetch(storageKey: string): string {
+        return window.localStorage.getItem(storageKey);
     }
 }

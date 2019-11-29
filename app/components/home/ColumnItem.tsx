@@ -18,6 +18,7 @@ interface ColumnItemProps {
     onTaskDragDrop: (column: ColumnModel) => void;
     onTaskDragOver: (column: ColumnModel) => (task: TaskModel, position: DraggedOn) => void;
     onTaskDragEnd: () => void;
+    onBoardUpdate: () => void;
 }
 
 export const ColumnItem = React.memo(
@@ -39,11 +40,16 @@ export const ColumnItem = React.memo(
                             onTaskDragStart={props.onTaskDragStart(column)}
                             onTaskDragOver={props.onTaskDragOver(column)}
                             onTaskDragEnd={props.onTaskDragEnd}
-                            onTaskInitialized={column.setTaskOnGoingCreate}
+                            onTaskInitialized={onTaskInitialized}
                         />
                     ))}
                 </div>
             );
+        };
+
+        const onTaskInitialized = () => {
+            column.setTaskOnGoingCreate();
+            props.onBoardUpdate();
         };
 
         const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -67,6 +73,7 @@ export const ColumnItem = React.memo(
             }
 
             column.setInitialized(true);
+            props.onBoardUpdate();
 
             if (column.name.isEditable) {
                 column.name.setEditable();

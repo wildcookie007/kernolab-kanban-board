@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StorageService } from '@app/services/storageService';
 import { inject, observer } from 'mobx-react';
 import { RouterMain } from './router';
-import LoadingSpinner from './shared/LoadingSpinner';
 import { ErrorModal } from './shared/ErrorModal';
 import { NotificationStore } from '@app/stores/notificationStore';
 
@@ -11,14 +10,9 @@ interface InitPageProps {
     notificationStore?: NotificationStore;
 }
 
-@inject('storageService', 'notificationStore')
+@inject('notificationStore')
 @observer
 export class InitPage extends Component<InitPageProps> {
-    async componentDidMount() {
-        const { storageService } = this.props;
-        storageService.setAppLoaded();
-    }
-
     handleCloseErrorModal = () => {
         this.props.notificationStore.setMessage(null);
     }
@@ -37,13 +31,6 @@ export class InitPage extends Component<InitPageProps> {
     };
 
     render() {
-        const { storageService } = this.props;
-        const { appLoading, appLoaded } = storageService;
-
-        if (appLoading || !appLoaded) {
-            return <LoadingSpinner />;
-        }
-
         return (
             <>
                 <RouterMain />
