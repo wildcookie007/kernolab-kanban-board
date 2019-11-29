@@ -157,6 +157,7 @@ export class Board extends Component<BoardProps> {
                 <Button primary onClick={this.onAddColumn} icon={<Icon path={mdiPlus} />}>
                     Add a column
                 </Button>
+
                 <div className={styles.boardColumnList}>{this.renderColumnList()}</div>
             </Col>
         );

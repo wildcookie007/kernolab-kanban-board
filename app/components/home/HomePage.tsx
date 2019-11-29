@@ -78,18 +78,21 @@ export class HomePage extends Component<HomePageProps> {
                 <div className={styles.headerContainer}>
                     Agile
                 </div>
+
                 <Board
                     board={board}
                     onBoardUpdate={this.handleSaveBoard}
                     onTaskDetails={this.handleTaskDetails}
                     onColumnRemove={this.handleColumnRemoveModal}
                 />
+
                 <TaskDetailsModal
                     visible={isTaskModalVisible}
                     details={taskModalDetails}
                     onSave={this.handleSaveTask}
                     onClose={this.handleTaskDetailsModalClose}
                 />
+
                 <DiscardModal
                     visible={isColumnRemoveModalVisible}
                     onClose={this.handleColumnRemoveModalClose}

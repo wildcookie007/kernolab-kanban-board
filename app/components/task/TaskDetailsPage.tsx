@@ -89,6 +89,7 @@ export class TaskDetailsPage extends Component<TaskDetailsPageProps> {
                         Discard
                     </Button>
                 </div>
+
                 <div className={styles.details}>
                     <div>{this.task.title.value}</div>
                     <span>
@@ -99,6 +100,7 @@ export class TaskDetailsPage extends Component<TaskDetailsPageProps> {
                         <span>Updated on: {this.task.updatedDate}</span>
                     </div>
                 </div>
+
                 <DiscardModal
                     visible={isDiscardModalVisible}
                     onClose={this.handleDiscardModalClose}

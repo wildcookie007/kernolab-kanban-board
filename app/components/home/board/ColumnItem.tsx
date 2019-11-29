@@ -109,6 +109,7 @@ export const ColumnItem = React.memo(
                                     icon={<Icon path={mdiPlusBox} />}
                                     title='Add a task'
                                 />
+
                                 <Button
                                     floated='right'
                                     transparent
@@ -116,6 +117,7 @@ export const ColumnItem = React.memo(
                                     icon={<Icon path={mdiPencil} />}
                                     title='Edit name'
                                 />
+
                                 <Button
                                     floated='right'
                                     transparent

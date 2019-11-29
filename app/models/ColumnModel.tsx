@@ -47,8 +47,9 @@ export class ColumnModel {
     };
 
     @action copyDroppedTask = (task: TaskConstructor, targetIdx: number) => {
-        // We dont want to mutate the original object and need all of the TaskModel properties included
         task.updatedAt = moment().unix();
+
+        // We dont want to mutate the original object when copying and need all of the TaskModel properties included
         const taskCopy = new TaskModel(null, task);
 
         if (targetIdx !== -1 && targetIdx !== this.tasks.length && targetIdx !== undefined) {

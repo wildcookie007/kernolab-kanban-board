@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-angle-bracket-type-assertion */
 const webpack = require('webpack');
 const path = require('path');
 
@@ -15,21 +14,21 @@ console.log(`Vendor instance: ${config.util.getEnv('NODE_APP_INSTANCE')}`);
 const productionPlugins = [
     new webpack.LoaderOptionsPlugin({
         optimize: true,
-        debug: false
+        debug: false,
     }),
 
     new webpack.DefinePlugin({
         'process.env': {
-            NODE_ENV: JSON.stringify(metadataConfig.environment)
-        }
-    })
+            NODE_ENV: JSON.stringify(metadataConfig.environment),
+        },
+    }),
 ];
 
 const generalPlugins = [
     new webpack.DllPlugin({
         path: path.resolve(__dirname, `../${bundleConfig.output}/[name]-manifest.json`),
-        name: '[name]_[hash:7]'
-    })
+        name: '[name]_[hash:7]',
+    }),
 ];
 
 const webpackConfig = {
@@ -39,18 +38,18 @@ const webpackConfig = {
             ? 'development'
             : 'none',
     entry: {
-        vendor: ['react', 'react-dom', 'react-router', 'moment', 'mobx', 'mobx-react', 'mobx-utils']
+        vendor: ['react', 'react-dom', 'react-router', 'moment', 'mobx', 'mobx-react', 'mobx-utils'],
     },
 
     output: {
         path: path.resolve(__dirname, `../${bundleConfig.output}`),
         publicPath: '/',
         filename: '[name].[hash:7].dll.js',
-        library: '[name]_[hash:7]'
+        library: '[name]_[hash:7]',
     },
 
     devtool: 'source-map',
-    plugins: generalPlugins
+    plugins: generalPlugins,
 };
 
 if (isProductionEnvironment || isDevelopmentEnvironment) {

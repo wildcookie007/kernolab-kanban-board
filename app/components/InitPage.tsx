@@ -23,6 +23,7 @@ export class InitPage extends Component<InitPageProps> {
 
     render() {
         const { initStore } = this.props;
+
         if (!initStore.isAppLoaded || initStore.isAppLoading) {
             return <LoadingSpinner />;
         }
