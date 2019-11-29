@@ -4,7 +4,7 @@ import { InitPage } from '../InitPage';
 import { BoardStore } from '@app/stores/boardStore';
 import { InitStore } from '@app/stores/initStore';
 
-describe('Board', () => {
+describe('InitPage', () => {
     let initPage: any;
     let boardStore: PartialMock<BoardStore>;
     let initStore: PartialMock<InitStore>;
