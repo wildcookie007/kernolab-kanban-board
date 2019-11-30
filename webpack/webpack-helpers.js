@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-triple-slash-reference */
-/* eslint-disable @typescript-eslint/no-angle-bracket-type-assertion */
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
@@ -85,5 +83,5 @@ module.exports = {
 
     loadDLLManifest,
     loadTypescriptAlias,
-    fixWebpackStartTime
+    fixWebpackStartTime,
 };
