@@ -16,7 +16,7 @@ export class BoardStore {
     @observable taskModalDetailsReference: TaskModel;
     @observable taskModalDetails: TaskModel;
 
-    constructor(private readonly _storageService: StorageService) { }
+    constructor(private readonly _storageService: StorageService) {}
 
     @action loadBoard() {
         const persistedBoard = this._storageService.fetch(this._localSaveKey);

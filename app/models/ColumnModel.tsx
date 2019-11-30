@@ -33,7 +33,7 @@ export class ColumnModel {
         return {
             id: this.id,
             name: this.name.value,
-            tasks: this.tasks.map((t) => t.toConstructorRequest())
+            tasks: this.tasks.filter((t) => t.initialized).map((t) => t.toConstructorRequest()),
         };
     }
 

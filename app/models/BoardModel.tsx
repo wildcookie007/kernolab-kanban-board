@@ -77,7 +77,7 @@ export class BoardModel {
         return {
             currentColumnId: this._currentColumnId,
             taskId: BoardModel.taskId,
-            columns: this.columns.map((c) => c.toConstructorRequest()),
+            columns: this.columns.filter((c) => c.initialized).map((c) => c.toConstructorRequest()),
         };
     }
 }

@@ -28,7 +28,7 @@ export class HomePage extends Component<HomePageProps> {
 
         boardStore.setRemoveColumnModalDetails(columnId);
         boardStore.setDiscardModalVisible(true);
-    }
+    };
 
     handleColumnRemoveModalConfirm = () => {
         const { boardStore } = this.props;
@@ -40,7 +40,7 @@ export class HomePage extends Component<HomePageProps> {
 
     handleColumnRemoveModalClose = () => {
         this.props.boardStore.setDiscardModalVisible(false);
-    }
+    };
 
     handleTaskDetails = (task: TaskModel) => () => {
         const { boardStore } = this.props;
@@ -54,7 +54,7 @@ export class HomePage extends Component<HomePageProps> {
 
         boardStore.setTaskModalVisible(false);
         boardStore.setTaskModalDetails(null);
-    }
+    };
 
     handleSaveTask = () => {
         const { boardStore } = this.props;
@@ -66,18 +66,13 @@ export class HomePage extends Component<HomePageProps> {
     };
 
     render() {
-        const { boardStore: {
-            board,
-            isTaskModalVisible,
-            taskModalDetails,
-            isDiscardModalVisible: isColumnRemoveModalVisible
-        } } = this.props;
+        const {
+            boardStore: { board, isTaskModalVisible, taskModalDetails, isDiscardModalVisible },
+        } = this.props;
 
         return (
             <Col xxl={24} className={styles.homeContainer}>
-                <div className={styles.headerContainer}>
-                    Agile
-                </div>
+                <div className={styles.headerContainer}>Agile</div>
 
                 <Board
                     board={board}
@@ -94,7 +89,7 @@ export class HomePage extends Component<HomePageProps> {
                 />
 
                 <DiscardModal
-                    visible={isColumnRemoveModalVisible}
+                    visible={isDiscardModalVisible}
                     onClose={this.handleColumnRemoveModalClose}
                     onConfirm={this.handleColumnRemoveModalConfirm}
                 />
