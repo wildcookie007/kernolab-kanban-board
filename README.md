@@ -14,6 +14,8 @@ Reasoning behind MobX choice: Since Redux requires a lot of boilerplate and is v
 
 As per requirements, I only wrote several tests to showcase my strategy and approach. This application definitely requires more tests i.e, for: `BoardModel`, `ColumnModel`, `Board`... to test-case integrity of the app's functionallity.
 
+For running tests use: `yarn test`, `yarn test:watch`
+
 ### Conclusion
 
 Requirements reached:
