@@ -55,7 +55,7 @@ export class TaskModel {
         this.dragging = value;
     };
 
-    @action setDraggedOn = (value: DraggedOn | null) => {
+    @action setDraggedOnPosition = (value: DraggedOn | null) => {
         this.draggedOn = value;
     };
 
@@ -81,13 +81,12 @@ export class TaskModel {
      * Used for copying to retain the class model properties and functions
      */
     toConstructorRequest(): TaskConstructor {
-        console.log(this.updatedAt, this.createdAt);
         return {
             id: this.id,
             title: this.title.value,
             description: this.description.value,
             createdAt: this.createdAt,
-            updatedAt: this.updatedAt
+            updatedAt: this.updatedAt,
         };
     }
 }

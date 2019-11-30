@@ -54,8 +54,7 @@ export const TaskItem = React.memo(
                 return;
             }
 
-            // Bad idea to put height here, but per say its not gonna change since task item height is fixed.
-            const taskHeight = 40;
+            const taskHeight = e.currentTarget.offsetHeight;
             const currentPosition = e.clientY;
             const containerTop = e.currentTarget.getBoundingClientRect().top;
 
@@ -76,7 +75,7 @@ export const TaskItem = React.memo(
                 onDragOver={onDragOver}
                 onDragEnd={props.onTaskDragEnd}
                 draggable={task.initialized}
-                onClick={task.initialized && props.onTaskDetails(task) || undefined}
+                onClick={(task.initialized && props.onTaskDetails(task)) || undefined}
             >
                 {!task.initialized ? (
                     <>

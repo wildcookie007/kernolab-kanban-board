@@ -63,7 +63,7 @@ export class Board extends Component<BoardProps> {
     /**
      * @param {TaskModel} task - The task on which another(dragged) task is currently hovering.
      * @param {ColumnModel} column - The column to which the task, which is hovered upon, belongs to.
-     * @param {DraggedOn} dragPosition - Specifies whether the task is hovering above or below
+     * @param {DraggedOn} dragPosition - Specifies whether the task is hovering above or below the target.
      */
     @action handleTaskDragOver = (column: ColumnModel) => (task: TaskModel, dragPosition: DraggedOn) => {
         const { board } = this.props;
@@ -85,7 +85,7 @@ export class Board extends Component<BoardProps> {
 
             // Check if the target position points to the same spot the currently dragged task is
             if (currentlyDragged.targetIdx === currentTaskIdx) {
-                task.setDraggedOn(null);
+                task.setDraggedOnPosition(null);
                 currentlyDragged.targetIdx = -1;
                 return;
             }
@@ -101,11 +101,11 @@ export class Board extends Component<BoardProps> {
 
         // Reset previous target since we got a new over drag
         if (targetTask) {
-            targetTask.setDraggedOn(null);
+            targetTask.setDraggedOnPosition(null);
         }
 
         // Assign new target
-        task.setDraggedOn(dragPosition);
+        task.setDraggedOnPosition(dragPosition);
         currentlyDragged.targetTask = task;
         currentlyDragged.targetColumn = column;
     };
@@ -116,10 +116,10 @@ export class Board extends Component<BoardProps> {
             currentlyDragged.targetColumn = column;
 
             if (currentlyDragged.targetTask) {
-                currentlyDragged.targetTask.setDraggedOn(null);
+                currentlyDragged.targetTask.setDraggedOnPosition(null);
                 currentlyDragged.targetIdx = -1;
             }
-        };
+        }
     };
 
     renderColumnList = () => {
